@@ -1,0 +1,12 @@
+{
+  "name": "github_API",
+  "version": "1.0.0",
+  "description": "Given a GitHub repository name and owner, download all the contributors' profile images and save them to a subdirectory, `avatars/`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
