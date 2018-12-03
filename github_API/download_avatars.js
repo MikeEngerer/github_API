@@ -1,6 +1,6 @@
 var request = require('request');
 var fs = require('fs');
-var GITHUB_TOKEN = require('./secrets.js')
+var GITHUB_TOKEN = require('./secrets')
 
 function getRepoContributors(repoOwner, repoName, cb) {
  
@@ -8,7 +8,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 	url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
   	headers: {
   		'User-Agent': 'request',
-  		Authorization: GITHUB_TOKEN
+  		'Authorization': 'token ' + GITHUB_TOKEN.GITHUB_TOKEN
   	}
   }
 
@@ -18,19 +18,27 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 
 function downloadImageByURL(url, filePath) {
-	request.get(url)
-		.pipe(fs.createWriteStream("./avatars.jpg"));
+	var options = {
+	url: url,
+  	headers: {
+  		'User-Agent': 'request',
+  		'Authorization': 'token ' + GITHUB_TOKEN.GITHUB_TOKEN
+  	}
+  }
+	request(options).pipe(fs.createWriteStream(filePath));
 }
 
 var cb = function(err, body) {
-	if (err) throw err;
+	if (err) {
+		console.log(err)
+	};
 	var parsedJSON = JSON.parse(body);
-	parsedJSON.forEach(function(obj) {
-		console.log(obj.avatar_url);
-	});
+		for (key in parsedJSON) {
+			downloadImageByURL(parsedJSON[key].avatar_url, "./avatars/" + parsedJSON[key].login + ".jpg")
+		}
 };
 
 
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
-// getRepoContributors("jquery", "jquery", cb)
+// downloadImageByURL("https://avatars3.githubusercontent.com/u/1199584?v=4", "./avatars.jpg")
+getRepoContributors("jquery", "jquery", cb)
 
