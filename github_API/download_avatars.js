@@ -1,6 +1,7 @@
 var request = require('request');
 var fs = require('fs');
 var GITHUB_TOKEN = require('./secrets')
+var input = [process.argv[2], process.argv[3]]
 
 function getRepoContributors(repoOwner, repoName, cb) {
  
@@ -40,5 +41,9 @@ var cb = function(err, body) {
 
 
 // downloadImageByURL("https://avatars3.githubusercontent.com/u/1199584?v=4", "./avatars.jpg")
-getRepoContributors("jquery", "jquery", cb)
+if (input[0] && input[1]) {
+	getRepoContributors(input[0], input[1], cb)
+} else {
+	console.log("Invalid input, please try again.")
+}
 
