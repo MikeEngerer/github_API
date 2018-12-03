@@ -1,4 +1,5 @@
 var request = require('request');
+var fs = require('fs');
 var GITHUB_TOKEN = require('./secrets.js')
 
 function getRepoContributors(repoOwner, repoName, cb) {
@@ -16,6 +17,11 @@ function getRepoContributors(repoOwner, repoName, cb) {
   })
 }
 
+function downloadImageByURL(url, filePath) {
+	request.get(url)
+		.pipe(fs.createWriteStream("./avatars.jpg"));
+}
+
 var cb = function(err, body) {
 	if (err) throw err;
 	var parsedJSON = JSON.parse(body);
@@ -24,5 +30,7 @@ var cb = function(err, body) {
 	});
 };
 
-getRepoContributors("jquery", "jquery", cb)
+
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
+// getRepoContributors("jquery", "jquery", cb)
 
